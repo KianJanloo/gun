@@ -23,6 +23,9 @@ export class User {
   @Column({ nullable: true })
   profile_image: string;
 
+  @Column({ nullable: false, default: 'user' })
+  role: 'user' | 'admin';
+
   @Column({ default: new Date(), nullable: false })
   createdAt: Date;
 

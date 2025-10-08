@@ -7,7 +7,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input LoginAuthInput {
+  email: String!
+  password: String!
+}
+
+type LoginResponse {
+  token: String!
+  user: UserType!
+}
+
 type Mutation {
+  login(loginAuthInput: LoginAuthInput!): LoginResponse!
+  register(registerAuthInput: RegisterAuthInput!): UserType!
   removeUser(id: ID!): UserType!
   updateUser(id: ID!, updateUserInput: UpdateUserInput!): UserType!
 }
@@ -17,11 +29,19 @@ type Query {
   users: [UserType!]!
 }
 
-input UpdateUserInput {
+input RegisterAuthInput {
   email: String!
   firstName: String!
   lastName: String!
+  password: String!
   username: String!
+}
+
+input UpdateUserInput {
+  email: String
+  firstName: String
+  lastName: String
+  username: String
 }
 
 type UserType {
@@ -31,6 +51,7 @@ type UserType {
   id: ID!
   lastName: String
   profile_image: String
+  role: String!
   updatedAt: DateTime!
   username: String!
 }

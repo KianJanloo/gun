@@ -6,16 +6,22 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DATABASE_HOST || 'localhost',
+      host: process.env.DATABASE_HOST,
       port: Number(process.env.DATABASE_PORT) || 5432,
-      username: process.env.DATABASE_USER || 'postgres',
-      password: process.env.DATABASE_PASSWORD || '1388ki8831',
-      database: process.env.DATABASE_NAME || 'postgres',
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
@@ -30,6 +36,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       },
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

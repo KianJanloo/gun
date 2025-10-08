@@ -28,7 +28,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || 'default',
+      secret: process.env.JWT_SECRET || 'default',
       resave: false,
       saveUninitialized: false,
     }),

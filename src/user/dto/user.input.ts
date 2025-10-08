@@ -21,6 +21,9 @@ export class UserType {
   profile_image?: string;
 
   @Field()
+  role: 'user' | 'admin';
+
+  @Field()
   createdAt: Date;
 
   @Field()
