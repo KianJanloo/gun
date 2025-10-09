@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { GunsModule } from './guns/guns.module';
 
 @Module({
   imports: [
@@ -28,15 +29,16 @@ import { ConfigModule } from '@nestjs/config';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true,
       installSubscriptionHandlers: true,
       sortSchema: true,
+      introspection: true,
       subscriptions: {
         'graphql-ws': true,
       },
     }),
     UserModule,
     AuthModule,
+    GunsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

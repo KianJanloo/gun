@@ -2,10 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateGunInput {
+  barrelLength: Float!
+  caliber: String!
+  isAvailable: Boolean!
+  magazineCapacity: Int!
+  model: String!
+  name: String!
+  type: GunType!
+  weight: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Gun {
+  barrelLength: Float
+  caliber: String
+  id: ID!
+  isAvailable: Boolean!
+  magazineCapacity: Int
+  model: String!
+  name: String!
+  type: GunType!
+  weight: Float
+}
+
+enum GunType {
+  COLT
+  HANDGUN
+  RIFLE
+  SHOTGUN
+  SMG
+  SNIPER
+}
 
 input LoginAuthInput {
   email: String!
@@ -18,13 +50,18 @@ type LoginResponse {
 }
 
 type Mutation {
+  createGun(createGunInput: CreateGunInput!): Gun!
   login(loginAuthInput: LoginAuthInput!): LoginResponse!
   register(registerAuthInput: RegisterAuthInput!): UserType!
+  removeGun(id: ID!): Gun!
   removeUser(id: ID!): UserType!
+  updateGun(updateGunInput: UpdateGunInput!): Gun!
   updateUser(id: ID!, updateUserInput: UpdateUserInput!): UserType!
 }
 
 type Query {
+  gun(id: ID!): Gun!
+  guns: [Gun!]!
   user(id: ID!): UserType!
   users: [UserType!]!
 }
@@ -35,6 +72,18 @@ input RegisterAuthInput {
   lastName: String!
   password: String!
   username: String!
+}
+
+input UpdateGunInput {
+  barrelLength: Float
+  caliber: String
+  id: String!
+  isAvailable: Boolean
+  magazineCapacity: Int
+  model: String
+  name: String
+  type: GunType
+  weight: Float
 }
 
 input UpdateUserInput {
