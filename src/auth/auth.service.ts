@@ -36,7 +36,7 @@ export class AuthService {
         secret: process.env.JWT_SECRET,
       });
       return payload;
-    } catch (error) {
+    } catch {
       throw new Error('Invalid token');
     }
   }
