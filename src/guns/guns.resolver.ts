@@ -8,6 +8,7 @@ import { GqlAuthGuard } from 'src/gql-auth-guard/gql-auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { GunsPagination } from './dto/gun.pagination';
+import { GunFilterInput, GunSortInput } from './dto/gun-filter.input';
 
 @Resolver(() => Gun)
 export class GunsResolver {
@@ -24,10 +25,17 @@ export class GunsResolver {
 
   @Query(() => GunsPagination, { name: 'guns' })
   async findAll(
-    @Args('page', { type: () => Number, nullable: true }) page?: number,
-    @Args('limit', { type: () => Number, nullable: true }) limit?: number,
+    @Args('page', { type: () => Number, nullable: true, defaultValue: 1 })
+    page: number,
+    @Args('limit', { type: () => Number, nullable: true, defaultValue: 10 })
+    limit: number,
+    @Args('filter', { type: () => GunFilterInput, nullable: true })
+    filter?: GunFilterInput,
+    @Args('sort', { type: () => GunSortInput, nullable: true })
+    sort?: GunSortInput,
   ): Promise<GunsPagination> {
-    return await this.gunsService.findAll(page, limit);
+    console.log(page, limit, filter, sort);
+    return await this.gunsService.findAll(page, limit, filter, sort);
   }
 
   @Query(() => Gun, { name: 'gun' })

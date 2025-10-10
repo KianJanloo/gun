@@ -30,6 +30,16 @@ type Gun {
   weight: Float
 }
 
+input GunFilterInput {
+  name: String
+  type: GunType
+}
+
+input GunSortInput {
+  createdAt: SortOrder
+  name: SortOrder
+}
+
 enum GunType {
   COLT
   HANDGUN
@@ -66,7 +76,7 @@ type Mutation {
 
 type Query {
   gun(id: ID!): Gun!
-  guns(limit: Float, page: Float): GunsPagination!
+  guns(filter: GunFilterInput, limit: Float = 10, page: Float = 1, sort: GunSortInput): GunsPagination!
   user(id: ID!): UserType!
   users(limit: Float = 10, page: Float = 1): USerPagination!
 }
@@ -77,6 +87,11 @@ input RegisterAuthInput {
   lastName: String!
   password: String!
   username: String!
+}
+
+enum SortOrder {
+  ASC
+  DESC
 }
 
 type USerPagination {
