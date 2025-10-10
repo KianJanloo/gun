@@ -1,0 +1,279 @@
+{
+  "info": {
+    "name": "gun - GraphQL API",
+    "_postman_id": "00000000-0000-0000-0000-000000000000",
+    "description": "Postman collection for the Gun GraphQL API. Generated automatically.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/graphql",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Queries",
+      "item": [
+        {
+          "name": "guns",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query guns($page: Float, $limit: Float){\n  guns(page: $page, limit: $limit){\n    total\n    guns{\n      id\n      name\n      model\n      type\n      caliber\n      barrelLength\n      magazineCapacity\n      weight\n      isAvailable\n    }\n  }\n}",
+                "variables": "{\n  \"page\": 1,\n  \"limit\": 10\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "gun",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query gun($id: ID!){\n  gun(id: $id){\n    id\n    name\n    model\n    type\n    caliber\n    barrelLength\n    magazineCapacity\n    weight\n    isAvailable\n  }\n}",
+                "variables": "{\n  \"id\": \"<GUN_ID>\"\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query users($page: Float = 1, $limit: Float = 10){\n  users(page: $page, limit: $limit){\n    total\n    users{\n      id\n      username\n      email\n      firstName\n      lastName\n      role\n      createdAt\n      updatedAt\n    }\n  }\n}",
+                "variables": "{\n  \"page\": 1,\n  \"limit\": 10\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query user($id: ID!){\n  user(id: $id){\n    id\n    username\n    email\n    firstName\n    lastName\n    role\n    createdAt\n    updatedAt\n  }\n}",
+                "variables": "{\n  \"id\": \"<USER_ID>\"\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mutations",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation register($registerAuthInput: RegisterAuthInput!){\n  register(registerAuthInput: $registerAuthInput){\n    id\n    username\n    email\n    firstName\n    lastName\n    role\n    createdAt\n    updatedAt\n  }\n}",
+                "variables": "{\n  \"registerAuthInput\": {\n    \"username\": \"newuser\",\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password123\",\n    \"firstName\": \"New\",\n    \"lastName\": \"User\"\n  }\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation login($loginAuthInput: LoginAuthInput!){\n  login(loginAuthInput: $loginAuthInput){\n    token\n    user{\n      id\n      username\n      email\n      role\n    }\n  }\n}",
+                "variables": "{\n  \"loginAuthInput\": {\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password123\"\n  }\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.data && json.data.login && json.data.login.token) {",
+                  "  pm.collectionVariables.set('token', json.data.login.token);",
+                  "  console.log('Saved token to collection variable: token');",
+                  "} else {",
+                  "  console.warn('No token found in login response');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "createGun",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation createGun($createGunInput: CreateGunInput!){\n  createGun(createGunInput: $createGunInput){\n    id\n    name\n    model\n    type\n    caliber\n    barrelLength\n    magazineCapacity\n    weight\n    isAvailable\n  }\n}",
+                "variables": "{\n  \"createGunInput\": {\n    \"name\": \"Example Gun\",\n    \"model\": \"M1\",\n    \"type\": \"RIFLE\",\n    \"caliber\": \"5.56\",\n    \"barrelLength\": 16.0,\n    \"magazineCapacity\": 30,\n    \"weight\": 8.5,\n    \"isAvailable\": true\n  }\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "updateGun",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation updateGun($updateGunInput: UpdateGunInput!){\n  updateGun(updateGunInput: $updateGunInput){\n    id\n    name\n    model\n    type\n    caliber\n    barrelLength\n    magazineCapacity\n    weight\n    isAvailable\n  }\n}",
+                "variables": "{\n  \"updateGunInput\": {\n    \"id\": \"<GUN_ID>\",\n    \"name\": \"Updated Name\"\n  }\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "removeGun",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation removeGun($id: ID!){\n  removeGun(id: $id){\n    id\n    name\n  }\n}",
+                "variables": "{\n  \"id\": \"<GUN_ID>\"\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "updateUser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation updateUser($id: ID!, $updateUserInput: UpdateUserInput!){\n  updateUser(id: $id, updateUserInput: $updateUserInput){\n    id\n    username\n    email\n    firstName\n    lastName\n    role\n  }\n}",
+                "variables": "{\n  \"id\": \"<USER_ID>\",\n  \"updateUserInput\": {\n    \"firstName\": \"Updated\"\n  }\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        },
+        {
+          "name": "removeUser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation removeUser($id: ID!){\n  removeUser(id: $id){\n    id\n    username\n  }\n}",
+                "variables": "{\n  \"id\": \"<USER_ID>\"\n}"
+              }
+            },
+            "url": "{{baseUrl}}"
+          }
+        }
+      ]
+    }
+  ]
+}
