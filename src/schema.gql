@@ -39,6 +39,11 @@ enum GunType {
   SNIPER
 }
 
+type GunsPagination {
+  guns: [Gun!]!
+  total: Int!
+}
+
 input LoginAuthInput {
   email: String!
   password: String!
@@ -61,9 +66,9 @@ type Mutation {
 
 type Query {
   gun(id: ID!): Gun!
-  guns: [Gun!]!
+  guns(limit: Float, page: Float): GunsPagination!
   user(id: ID!): UserType!
-  users: [UserType!]!
+  users(limit: Float = 10, page: Float = 1): USerPagination!
 }
 
 input RegisterAuthInput {
@@ -72,6 +77,11 @@ input RegisterAuthInput {
   lastName: String!
   password: String!
   username: String!
+}
+
+type USerPagination {
+  total: Float!
+  users: [UserType!]!
 }
 
 input UpdateGunInput {

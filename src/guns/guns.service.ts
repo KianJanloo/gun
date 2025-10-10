@@ -17,9 +17,12 @@ export class GunsService {
     return await this.gunsRepository.save(gun);
   }
 
-  async findAll() {
-    const guns = await this.gunsRepository.find();
-    return guns;
+  async findAll(page?: number, limit?: number) {
+    const [guns, count] = await this.gunsRepository.findAndCount({
+      skip: page && limit ? (page - 1) * limit : 0,
+      take: limit || 10,
+    });
+    return { guns, total: count };
   }
 
   async findOne(id: string) {

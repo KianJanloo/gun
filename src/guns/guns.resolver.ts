@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/gql-auth-guard/gql-auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
+import { GunsPagination } from './dto/gun.pagination';
 
 @Resolver(() => Gun)
 export class GunsResolver {
@@ -21,9 +22,12 @@ export class GunsResolver {
     return await this.gunsService.create(createGunInput);
   }
 
-  @Query(() => [Gun], { name: 'guns' })
-  async findAll(): Promise<Gun[]> {
-    return await this.gunsService.findAll();
+  @Query(() => GunsPagination, { name: 'guns' })
+  async findAll(
+    @Args('page', { type: () => Number, nullable: true }) page?: number,
+    @Args('limit', { type: () => Number, nullable: true }) limit?: number,
+  ): Promise<GunsPagination> {
+    return await this.gunsService.findAll(page, limit);
   }
 
   @Query(() => Gun, { name: 'gun' })

@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/gql-auth-guard/gql-auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
+import { USerPagination } from './dto/user.pagination';
 
 @Resolver(() => UserType)
 export class UserResolver {
@@ -13,9 +14,14 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles('admin')
-  @Query(() => [UserType], { name: 'users' })
-  async findAll() {
-    return this.userService.findAll();
+  @Query(() => USerPagination, { name: 'users' })
+  async findAll(
+    @Args('page', { type: () => Number, nullable: true, defaultValue: 1 })
+    page: number,
+    @Args('limit', { type: () => Number, nullable: true, defaultValue: 10 })
+    limit: number,
+  ) {
+    return this.userService.findAll(page, limit);
   }
 
   @UseGuards(GqlAuthGuard)
