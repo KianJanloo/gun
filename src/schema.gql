@@ -32,7 +32,7 @@ type Gun {
 
 input GunFilterInput {
   name: String
-  type: GunType
+  type: String
 }
 
 input GunSortInput {

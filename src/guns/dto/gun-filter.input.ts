@@ -11,8 +11,8 @@ registerEnumType(GunType, { name: 'GunType' });
 
 @InputType()
 export class GunFilterInput {
-  @Field(() => GunType, { nullable: true })
-  type?: GunType;
+  @Field(() => String, { nullable: true })
+  type?: string;
 
   @Field({ nullable: true })
   name?: string;

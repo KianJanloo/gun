@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID, Context } from '@nestjs/graphql';
 import { GunsService } from './guns.service';
 import { CreateGunInput } from './dto/create-gun.input';
 import { UpdateGunInput } from './dto/update-gun.input';
@@ -25,6 +25,7 @@ export class GunsResolver {
 
   @Query(() => GunsPagination, { name: 'guns' })
   async findAll(
+    @Context() ctx: any,
     @Args('page', { type: () => Number, nullable: true, defaultValue: 1 })
     page: number,
     @Args('limit', { type: () => Number, nullable: true, defaultValue: 10 })
@@ -34,8 +35,15 @@ export class GunsResolver {
     @Args('sort', { type: () => GunSortInput, nullable: true })
     sort?: GunSortInput,
   ): Promise<GunsPagination> {
-    console.log(page, limit, filter, sort);
-    return await this.gunsService.findAll(page, limit, filter, sort);
+    console.log(filter, sort);
+    const filterObject = ctx.req.body.variables.filter ?? {};
+    const sortObject = ctx.req.body.variables.sort ?? {};
+    return await this.gunsService.findAll(
+      page,
+      limit,
+      filterObject,
+      sortObject,
+    );
   }
 
   @Query(() => Gun, { name: 'gun' })

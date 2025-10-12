@@ -37,4 +37,10 @@ export class Gun {
 
   @Column({ default: true })
   isAvailable: boolean;
+
+  @Column({ default: new Date() })
+  createdAt: Date;
+
+  @Column({ default: new Date() })
+  updatedAt: Date;
 }
