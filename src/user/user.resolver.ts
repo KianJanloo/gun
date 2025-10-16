@@ -46,4 +46,14 @@ export class UserResolver {
     const result = await this.userService.remove(id);
     return result.message;
   }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Mutation(() => UserType, { name: 'changeUserRole' })
+  async changeUserRole(
+    @Args('id', { type: () => ID }) id: string,
+    @Args('role', { type: () => String }) role: 'admin' | 'user',
+  ) {
+    return await this.userService.changeUserRole(id, role);
+  }
 }

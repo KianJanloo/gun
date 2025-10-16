@@ -65,6 +65,7 @@ type LoginResponse {
 }
 
 type Mutation {
+  changeUserRole(id: ID!, role: String!): UserType!
   createGun(createGunInput: CreateGunInput!): Gun!
   login(loginAuthInput: LoginAuthInput!): LoginResponse!
   register(registerAuthInput: RegisterAuthInput!): UserType!

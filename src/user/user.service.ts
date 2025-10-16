@@ -23,6 +23,7 @@ export class UserService {
         'lastName',
         'profile_image',
         'email',
+        'role',
         'createdAt',
         'updatedAt',
       ],
@@ -42,6 +43,7 @@ export class UserService {
         'lastName',
         'profile_image',
         'email',
+        'role',
         'createdAt',
         'updatedAt',
       ],
@@ -77,5 +79,17 @@ export class UserService {
     await this.usersRepository.remove(user);
 
     return { message: `User with id ${id} has been removed successfully` };
+  }
+
+  async changeUserRole(id: string, role: 'admin' | 'user'): Promise<User> {
+    const user = await this.usersRepository.find({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    user[0].role = role;
+    await this.usersRepository.save(user[0]);
+    return user[0];
   }
 }
